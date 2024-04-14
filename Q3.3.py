@@ -32,7 +32,8 @@ T = 10
 delta = 1/(252)
 t = np.array([m*delta for m in range(0,(252*T) + 1)])
 tau = T - t
-p = 0.5
+p1 = 0.5
+p2 = -0.5
 
 
 
@@ -56,10 +57,13 @@ def optimalpi(sigma, rho, lambdabar, p, kappa, tau):
 
 ### Sigma
 
-piBM = optimalpi(sigma, rho, lambdabar, p, kappa, tau)
-piSigma1 = optimalpi(0.05, rho, lambdabar, p, kappa, tau)
-piSigma2 = optimalpi(0.5, rho, lambdabar, p, kappa, tau)
-piSigma3 = optimalpi(0.8, rho, lambdabar, p, kappa, tau)
+p1 = 0.5
+p2 = -0.5
+
+piBM1 = optimalpi(sigma, rho, lambdabar, p1, kappa, tau)
+piSigma11 = optimalpi(0.05, rho, lambdabar, p1, kappa, tau)
+piSigma21 = optimalpi(0.5, rho, lambdabar, p1, kappa, tau)
+piSigma31 = optimalpi(0.8, rho, lambdabar, p1, kappa, tau)
 
 
 
@@ -78,11 +82,44 @@ ax.set_yticklabels(yticks1,fontsize = 6)
 ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
 plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
 ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
-p1 = ax.scatter(t, piBM, s = 3, color = 'hotpink', marker = ".",label="BM, $\sigma = 0.3$")
-p2 = ax.scatter(t, piSigma1, s = 3, color = 'cadetblue', marker = ".",label="$\sigma = 0.05$")
-p3 = ax.scatter(t, piSigma2, s = 3, color = 'salmon', marker = ".",label="$\sigma = 0.5$")
-p4 = ax.scatter(t, piSigma3, s = 3, color = 'darkolivegreen', marker = ".",label="$\sigma = 0.8$")
-plots = [p1, p2, p3, p4]
+p1 = ax.scatter(t, piBM1, s = 3, color = 'hotpink', marker = ".",label="BM, $\sigma = 0.3$")
+p2 = ax.scatter(t, piSigma11, s = 3, color = 'cadetblue', marker = ".",label="$\sigma = 0.05$")
+p3 = ax.scatter(t, piSigma21, s = 3, color = 'salmon', marker = ".",label="$\sigma = 0.5$")
+p4 = ax.scatter(t, piSigma31, s = 3, color = 'darkolivegreen', marker = ".",label="$\sigma = 0.8$")
+plots = [p2, p1, p3, p4]
+labels = [item.get_label() for item in plots]
+ax.legend(plots,labels,loc="lower right",fontsize = 5)
+
+plt.show()
+
+
+piBM2 = optimalpi(sigma, rho, lambdabar, p2, kappa, tau)
+piSigma12 = optimalpi(0.05, rho, lambdabar, p2, kappa, tau)
+piSigma22 = optimalpi(0.5, rho, lambdabar, p2, kappa, tau)
+piSigma32 = optimalpi(0.8, rho, lambdabar, p2, kappa, tau)
+
+
+
+fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
+fig.suptitle(f"Optimal investment strategy as function of time for varying $\sigma$",fontsize=10)
+gs = fig.add_gridspec(nrows=1,ncols=1,left=0.12,bottom=0.2,right=0.88,top=0.90,wspace=0,hspace=0)
+ax = fig.add_subplot(gs[0,0])
+xticks = [0,int((1/5)*T),int((2/5)*T),int((3/5)*T),int((4/5)*T),int(T)]
+ax.set_xticks(xticks)
+ax.set_xticklabels(xticks,fontsize = 6)
+ax.set_xlim([xticks[0]-0.002,xticks[-1]+0.002])
+plt.xlabel(f"Time",fontsize = 7)
+yticks1 = [0.266, 0.268, 0.27, 0.272, 0.274]
+ax.set_yticks(yticks1)
+ax.set_yticklabels(yticks1,fontsize = 6)
+ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
+plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
+ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
+p1 = ax.scatter(t, piBM2, s = 3, color = 'hotpink', marker = ".",label="BM, $\sigma = 0.3$")
+p2 = ax.scatter(t, piSigma12, s = 3, color = 'cadetblue', marker = ".",label="$\sigma = 0.05$")
+p3 = ax.scatter(t, piSigma22, s = 3, color = 'salmon', marker = ".",label="$\sigma = 0.5$")
+p4 = ax.scatter(t, piSigma32, s = 3, color = 'darkolivegreen', marker = ".",label="$\sigma = 0.8$")
+plots = [p2, p1, p3, p4]
 labels = [item.get_label() for item in plots]
 ax.legend(plots,labels,loc="lower right",fontsize = 5)
 
@@ -90,15 +127,16 @@ plt.show()
 
 
 
-
-
 ### Rho
 
 
-piBM = optimalpi(sigma, rho, lambdabar, p, kappa, tau)
-piRho1 = optimalpi(sigma, (-0.2), lambdabar, p, kappa, tau)
-piRho2 = optimalpi(sigma, (-0.8), lambdabar, p, kappa, tau)
-piRho3 = optimalpi(sigma, (-0.05), lambdabar, p, kappa, tau)
+p1 = 0.5
+p2 = -0.5
+
+piBM1 = optimalpi(sigma, rho, lambdabar, p1, kappa, tau)
+piRho11 = optimalpi(sigma, (-0.2), lambdabar, p1, kappa, tau)
+piRho12 = optimalpi(sigma, (-0.8), lambdabar, p1, kappa, tau)
+piRho13 = optimalpi(sigma, (-0.05), lambdabar, p1, kappa, tau)
 
 
 fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
@@ -116,11 +154,45 @@ ax.set_yticklabels(yticks1,fontsize = 6)
 ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
 plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
 ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
-p1 = ax.scatter(t, piBM, s = 3, color = 'hotpink', marker = ".",label="BM, $\\rho = -0.5$")
-p2 = ax.scatter(t, piRho1, s = 3, color = 'cadetblue', marker = ".",label="$\\rho = -0.2$")
-p3 = ax.scatter(t, piRho2, s = 3, color = 'salmon', marker = ".",label="$\\rho = -0.8$")
-p4 = ax.scatter(t, piRho3, s = 3, color = 'darkolivegreen', marker = ".",label="$\\rho = -0.05$")
-plots = [p1, p2, p3, p4]
+p1 = ax.scatter(t, piBM1, s = 3, color = 'hotpink', marker = ".",label="BM, $\\rho = -0.5$")
+p2 = ax.scatter(t, piRho11, s = 3, color = 'cadetblue', marker = ".",label="$\\rho = -0.2$")
+p3 = ax.scatter(t, piRho12, s = 3, color = 'salmon', marker = ".",label="$\\rho = -0.8$")
+p4 = ax.scatter(t, piRho13, s = 3, color = 'darkolivegreen', marker = ".",label="$\\rho = -0.05$")
+plots = [p3, p1, p2, p4]
+labels = [item.get_label() for item in plots]
+ax.legend(plots,labels,loc="lower right",fontsize = 5)
+
+plt.show()
+
+
+
+
+piBM2 = optimalpi(sigma, rho, lambdabar, p2, kappa, tau)
+piRho21 = optimalpi(sigma, (-0.2), lambdabar, p2, kappa, tau)
+piRho22 = optimalpi(sigma, (-0.8), lambdabar, p2, kappa, tau)
+piRho23 = optimalpi(sigma, (-0.05), lambdabar, p2, kappa, tau)
+
+
+fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
+fig.suptitle(f"Optimal investment strategy as function of time for varying $\\rho$",fontsize=10)
+gs = fig.add_gridspec(nrows=1,ncols=1,left=0.12,bottom=0.2,right=0.88,top=0.90,wspace=0,hspace=0)
+ax = fig.add_subplot(gs[0,0])
+xticks = [0,int((1/5)*T),int((2/5)*T),int((3/5)*T),int((4/5)*T),int(T)]
+ax.set_xticks(xticks)
+ax.set_xticklabels(xticks,fontsize = 6)
+ax.set_xlim([xticks[0]-0.002,xticks[-1]+0.002])
+plt.xlabel(f"Time",fontsize = 7)
+yticks1 = [0.266, 0.268, 0.27, 0.272]
+ax.set_yticks(yticks1)
+ax.set_yticklabels(yticks1,fontsize = 6)
+ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
+plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
+ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
+p1 = ax.scatter(t, piBM2, s = 3, color = 'hotpink', marker = ".",label="BM, $\\rho = -0.5$")
+p2 = ax.scatter(t, piRho21, s = 3, color = 'cadetblue', marker = ".",label="$\\rho = -0.2$")
+p3 = ax.scatter(t, piRho22, s = 3, color = 'salmon', marker = ".",label="$\\rho = -0.8$")
+p4 = ax.scatter(t, piRho23, s = 3, color = 'darkolivegreen', marker = ".",label="$\\rho = -0.05$")
+plots = [p3, p1, p2, p4]
 labels = [item.get_label() for item in plots]
 ax.legend(plots,labels,loc="lower right",fontsize = 5)
 
@@ -132,13 +204,14 @@ plt.show()
 
 ### Kappa
 
+p1 = 0.5
+p2 = -0.5
 
 
-
-piBM = optimalpi(sigma, rho, lambdabar, p, kappa, tau)
-piKappa1 = optimalpi(sigma, rho, lambdabar, p, 2, tau)
-piKappa2 = optimalpi(sigma, rho, lambdabar, p, 0.5, tau)
-piKappa3 = optimalpi(sigma, rho, lambdabar, p, 3, tau)
+piBM1 = optimalpi(sigma, rho, lambdabar, p1, kappa, tau)
+piKappa11 = optimalpi(sigma, rho, lambdabar, p1, 2, tau)
+piKappa12 = optimalpi(sigma, rho, lambdabar, p1, 0.5, tau)
+piKappa13 = optimalpi(sigma, rho, lambdabar, p1, 3, tau)
 
 
 
@@ -157,11 +230,11 @@ ax.set_yticklabels(yticks1,fontsize = 6)
 ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
 plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
 ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
-p1 = ax.scatter(t, piBM, s = 3, color = 'hotpink', marker = ".",label="BM, $\\kappa = 1$")
-p2 = ax.scatter(t, piKappa1, s = 3, color = 'cadetblue', marker = ".",label="$\\kappa = 2$")
-p3 = ax.scatter(t, piKappa2, s = 3, color = 'salmon', marker = ".",label="$\\kappa = 0.5$")
-p4 = ax.scatter(t, piKappa3, s = 3, color = 'darkolivegreen', marker = ".",label="$\\kappa = 3$")
-plots = [p1, p2, p3, p4]
+p1 = ax.scatter(t, piBM1, s = 3, color = 'hotpink', marker = ".",label="BM, $\\kappa = 1$")
+p2 = ax.scatter(t, piKappa11, s = 3, color = 'cadetblue', marker = ".",label="$\\kappa = 2$")
+p3 = ax.scatter(t, piKappa12, s = 3, color = 'salmon', marker = ".",label="$\\kappa = 0.5$")
+p4 = ax.scatter(t, piKappa13, s = 3, color = 'darkolivegreen', marker = ".",label="$\\kappa = 3$")
+plots = [p3, p1, p2, p4]
 labels = [item.get_label() for item in plots]
 ax.legend(plots,labels,loc="lower right",fontsize = 5)
 
@@ -170,16 +243,56 @@ plt.show()
 
 
 
+p1 = 0.5
+p2 = -0.5
+
+
+piBM2 = optimalpi(sigma, rho, lambdabar, p2, kappa, tau)
+piKappa21 = optimalpi(sigma, rho, lambdabar, p2, 2, tau)
+piKappa22 = optimalpi(sigma, rho, lambdabar, p2, 0.5, tau)
+piKappa23 = optimalpi(sigma, rho, lambdabar, p2, 3, tau)
+
+
+
+fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
+fig.suptitle(f"Optimal investment strategy as function of time for varying $\\kappa$",fontsize=10)
+gs = fig.add_gridspec(nrows=1,ncols=1,left=0.12,bottom=0.2,right=0.88,top=0.90,wspace=0,hspace=0)
+ax = fig.add_subplot(gs[0,0])
+xticks = [0,int((1/5)*T),int((2/5)*T),int((3/5)*T),int((4/5)*T),int(T)]
+ax.set_xticks(xticks)
+ax.set_xticklabels(xticks,fontsize = 6)
+ax.set_xlim([xticks[0]-0.002,xticks[-1]+0.002])
+plt.xlabel(f"Time",fontsize = 7)
+yticks1 = [0.266, 0.268, 0.27, 0.272, 0.274]
+ax.set_yticks(yticks1)
+ax.set_yticklabels(yticks1,fontsize = 6)
+ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
+plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
+ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
+p1 = ax.scatter(t, piBM2, s = 3, color = 'hotpink', marker = ".",label="BM, $\\kappa = 1$")
+p2 = ax.scatter(t, piKappa21, s = 3, color = 'cadetblue', marker = ".",label="$\\kappa = 2$")
+p3 = ax.scatter(t, piKappa22, s = 3, color = 'salmon', marker = ".",label="$\\kappa = 0.5$")
+p4 = ax.scatter(t, piKappa23, s = 3, color = 'darkolivegreen', marker = ".",label="$\\kappa = 3$")
+plots = [p3, p1, p2, p4]
+labels = [item.get_label() for item in plots]
+ax.legend(plots,labels,loc="lower right",fontsize = 5)
+
+plt.show()
+
+
+
 
 ### Lambdabar
 
 
+p1 = 0.5
+p2 = -0.5
 
 
-piBM = optimalpi(sigma, rho, lambdabar, p, kappa, tau)
-piLambdabar1 = optimalpi(sigma, rho, 0.1, p, kappa, tau)
-piLambdabar2 = optimalpi(sigma, rho, 0.9, p, kappa, tau)
-piLambdabar3 = optimalpi(sigma, rho, 3, p, kappa, tau)
+piBM1 = optimalpi(sigma, rho, lambdabar, p1, kappa, tau)
+piLambdabar11 = optimalpi(sigma, rho, 0.1, p1, kappa, tau)
+piLambdabar12 = optimalpi(sigma, rho, 0.9, p1, kappa, tau)
+piLambdabar13 = optimalpi(sigma, rho, 3, p1, kappa, tau)
 
 
 fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
@@ -197,11 +310,11 @@ ax.set_yticklabels(yticks1,fontsize = 6)
 ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
 plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
 ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
-p1 = ax.scatter(t, piBM, s = 3, color = 'hotpink', marker = ".",label="BM, $\overline{\lambda}  = 0.4$")
-p2 = ax.scatter(t, piLambdabar1, s = 3, color = 'cadetblue', marker = ".",label="$\overline{\lambda} = 0.1$")
-p3 = ax.scatter(t, piLambdabar2, s = 3, color = 'salmon', marker = ".",label="$\overline{\lambda} = 0.9$")
-p4 = ax.scatter(t, piLambdabar3, s = 3, color = 'darkolivegreen', marker = ".",label="$\overline{\lambda} = 3$")
-plots = [p1, p2, p3, p4]
+p1 = ax.scatter(t, piBM1, s = 3, color = 'hotpink', marker = ".",label="BM, $\overline{\lambda}  = 0.4$")
+p2 = ax.scatter(t, piLambdabar11, s = 3, color = 'cadetblue', marker = ".",label="$\overline{\lambda} = 0.1$")
+p3 = ax.scatter(t, piLambdabar12, s = 3, color = 'salmon', marker = ".",label="$\overline{\lambda} = 0.9$")
+p4 = ax.scatter(t, piLambdabar13, s = 3, color = 'darkolivegreen', marker = ".",label="$\overline{\lambda} = 3$")
+plots = [p2, p1, p3, p4]
 labels = [item.get_label() for item in plots]
 ax.legend(plots,labels,loc="center right",fontsize = 5)
 
@@ -210,7 +323,50 @@ plt.show()
 
 
 
+
+
+p1 = 0.5
+p2 = -0.5
+
+
+piBM2 = optimalpi(sigma, rho, lambdabar, p2, kappa, tau)
+piLambdabar21 = optimalpi(sigma, rho, 0.1, p2, kappa, tau)
+piLambdabar22 = optimalpi(sigma, rho, 0.9, p2, kappa, tau)
+piLambdabar23 = optimalpi(sigma, rho, 3, p2, kappa, tau)
+
+
+fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
+fig.suptitle(f"Optimal investment strategy as function of time for varying $\\lambda$",fontsize=10)
+gs = fig.add_gridspec(nrows=1,ncols=1,left=0.12,bottom=0.2,right=0.88,top=0.90,wspace=0,hspace=0)
+ax = fig.add_subplot(gs[0,0])
+xticks = [0,int((1/5)*T),int((2/5)*T),int((3/5)*T),int((4/5)*T),int(T)]
+ax.set_xticks(xticks)
+ax.set_xticklabels(xticks,fontsize = 6)
+ax.set_xlim([xticks[0]-0.002,xticks[-1]+0.002])
+plt.xlabel(f"Time",fontsize = 7)
+yticks1 = [0.00, 0.5, 1, 1.5, 2, 2.5]
+ax.set_yticks(yticks1)
+ax.set_yticklabels(yticks1,fontsize = 6)
+ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
+plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
+ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
+p1 = ax.scatter(t, piBM2, s = 3, color = 'hotpink', marker = ".",label="BM, $\overline{\lambda}  = 0.4$")
+p2 = ax.scatter(t, piLambdabar21, s = 3, color = 'cadetblue', marker = ".",label="$\overline{\lambda} = 0.1$")
+p3 = ax.scatter(t, piLambdabar22, s = 3, color = 'salmon', marker = ".",label="$\overline{\lambda} = 0.9$")
+p4 = ax.scatter(t, piLambdabar23, s = 3, color = 'darkolivegreen', marker = ".",label="$\overline{\lambda} = 3$")
+plots = [p2, p1, p3, p4]
+labels = [item.get_label() for item in plots]
+ax.legend(plots,labels,loc="center right",fontsize = 5)
+
+plt.show()
+
+
+
+
+
 ### Utility
+
+p = 0.5
 
 wealth = np.array([i*1/100 for i in range(0,100*100 + 1)])
 utility = wealth**p / p
@@ -270,8 +426,12 @@ plt.show()
 ### p
 
 
+p1 = 0.5
+p2 = -0.5
 
-piBM = optimalpi(sigma, rho, lambdabar, p, kappa, tau)
+
+piBM1 = optimalpi(sigma, rho, lambdabar, p1, kappa, tau)
+piBM2 = optimalpi(sigma, rho, lambdabar, p2, kappa, tau)
 piP1 = optimalpi(sigma, rho, lambdabar, -2, kappa, tau)
 piP5 = optimalpi(sigma, rho, lambdabar, -5, kappa, tau)
 piP2 = optimalpi(sigma, rho, lambdabar, 0.8, kappa, tau)
@@ -296,13 +456,14 @@ ax.set_yticklabels(yticks1,fontsize = 6)
 ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
 plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
 ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
-p1 = ax.scatter(t, piBM, s = 3, color = 'hotpink', marker = ".",label="BM, $p  = 0.5$")
+p1 = ax.scatter(t, piBM1, s = 3, color = 'hotpink', marker = ".",label="BM, $p  = 0.5$")
 p2 = ax.scatter(t, piP5, s = 3, color = 'cadetblue', marker = ".",label="$p = -5$")
 p3 = ax.scatter(t, piP1, s = 3, color = 'palevioletred', marker = ".",label="$p = -2$")
 p4 = ax.scatter(t, piP4, s = 3, color = 'orchid', marker = ".",label="$p = 0.1$")
 p5 = ax.scatter(t, piP2, s = 3, color = 'salmon', marker = ".",label="$p = 0.8$")
 p6 = ax.scatter(t, piP3, s = 3, color = 'darkolivegreen', marker = ".",label="$p = 0.9$")
-plots = [p1, p2, p3, p4, p5, p6]
+p7 = ax.scatter(t, piBM2, s = 3, color = 'maroon', marker = ".",label="$p = -0.5$")
+plots = [p2, p3, p7, p4, p1, p5, p6]
 labels = [item.get_label() for item in plots]
 ax.legend(plots,labels,loc="upper left",fontsize = 5)
 
@@ -312,64 +473,14 @@ plt.show()
 
 ### T
 
-
-
-piT0 = optimalpi(sigma, rho, lambdabar, p, kappa, tau)
-
-
-fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
-fig.suptitle(f"Optimal investment strategy as function of time for varying $T$",fontsize=10)
-gs = fig.add_gridspec(nrows=1,ncols=1,left=0.12,bottom=0.2,right=0.88,top=0.90,wspace=0,hspace=0)
-ax = fig.add_subplot(gs[0,0])
-xticks = [0,int((1/5)*T),int((2/5)*T),int((3/5)*T),int((4/5)*T),int(T)]
-ax.set_xticks(xticks)
-ax.set_xticklabels(xticks,fontsize = 6)
-ax.set_xlim([xticks[0]-0.002,xticks[-1]+0.002])
-plt.xlabel(f"Time",fontsize = 7)
-yticks1 = [0.77, 0.78, 0.79, 0.8]
-ax.set_yticks(yticks1)
-ax.set_yticklabels(yticks1,fontsize = 6)
-ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
-plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
-ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
-p1 = ax.scatter(t, piT0, s = 3, color = 'palevioletred', marker = ".",label="$T=10$")
-plots = [p1]
-labels = [item.get_label() for item in plots]
-ax.legend(plots,labels,loc="upper left",fontsize = 5)
-
-plt.show()
+p1 = 0.5
+p2 = -0.5
 
 
 T1 = 3
 delta = 1/(252)
 t1 = np.array([m*delta for m in range(0,(252*T1) + 1)])
 tau1 = T1 - t1
-
-piT1 = optimalpi(sigma, rho, lambdabar, p, kappa, tau1)
-
-
-fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
-fig.suptitle(f"Optimal investment strategy as function of time for varying $T$",fontsize=10)
-gs = fig.add_gridspec(nrows=1,ncols=1,left=0.12,bottom=0.2,right=0.88,top=0.90,wspace=0,hspace=0)
-ax = fig.add_subplot(gs[0,0])
-xticks = [0,int((1/5)*T1),int((2/5)*T1),int((3/5)*T1),int((4/5)*T1),int(T1)]
-ax.set_xticks(xticks)
-ax.set_xticklabels(xticks,fontsize = 6)
-ax.set_xlim([xticks[0]-0.002,xticks[-1]+0.002])
-plt.xlabel(f"Time",fontsize = 7)
-yticks1 = [0.77, 0.78, 0.79, 0.8]
-ax.set_yticks(yticks1)
-ax.set_yticklabels(yticks1,fontsize = 6)
-ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
-plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
-ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
-p1 = ax.scatter(t1, piT1, s = 3, color = 'palevioletred', marker = ".",label="$T=3$")
-plots = [p1]
-labels = [item.get_label() for item in plots]
-ax.legend(plots,labels,loc="upper left",fontsize = 5)
-
-plt.show()
-
 
 
 
@@ -378,7 +489,15 @@ delta = 1/(252)
 t2 = np.array([m*delta for m in range(0,(252*T2) + 1)])
 tau2 = T2 - t2
 
-piT2 = optimalpi(sigma, rho, lambdabar, p, kappa, tau2)
+
+
+
+piT21 = optimalpi(sigma, rho, lambdabar, p1, kappa, tau2)
+piT01 = np.zeros(len(piT21))
+piT01[0:2521] = optimalpi(sigma, rho, lambdabar, p1, kappa, tau)
+piT11 = np.zeros(len(piT21))
+piT11[0:757] = optimalpi(sigma, rho, lambdabar, p1, kappa, tau1)
+
 
 
 fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
@@ -396,41 +515,9 @@ ax.set_yticklabels(yticks1,fontsize = 6)
 ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
 plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
 ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
-p1 = ax.scatter(t2, piT2, s = 3, color = 'palevioletred', marker = ".",label="$T=30$")
-plots = [p1]
-labels = [item.get_label() for item in plots]
-ax.legend(plots,labels,loc="upper left",fontsize = 5)
-
-plt.show()
-
-
-
-
-piT0 = np.zeros(len(piT2))
-piT0[0:2521] = optimalpi(sigma, rho, lambdabar, p, kappa, tau)
-piT1 = np.zeros(len(piT2))
-piT1[0:757] = optimalpi(sigma, rho, lambdabar, p, kappa, tau1)
-piT2 = optimalpi(sigma, rho, lambdabar, p, kappa, tau2)
-
-
-fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
-fig.suptitle(f"Optimal investment strategy as function of time for varying $T$",fontsize=10)
-gs = fig.add_gridspec(nrows=1,ncols=1,left=0.12,bottom=0.2,right=0.88,top=0.90,wspace=0,hspace=0)
-ax = fig.add_subplot(gs[0,0])
-xticks = [0,int((1/5)*T2),int((2/5)*T2),int((3/5)*T2),int((4/5)*T2),int(T2)]
-ax.set_xticks(xticks)
-ax.set_xticklabels(xticks,fontsize = 6)
-ax.set_xlim([xticks[0]-0.002,xticks[-1]+0.002])
-plt.xlabel(f"Time",fontsize = 7)
-yticks1 = [0.77, 0.78, 0.79, 0.8]
-ax.set_yticks(yticks1)
-ax.set_yticklabels(yticks1,fontsize = 6)
-ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
-plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
-ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
-p2 = ax.scatter(t2, piT0, s = 3, color = 'palevioletred', marker = ".",label="$T=10$")
-p1 = ax.scatter(t2, piT1, s = 3, color = 'cadetblue', marker = ".",label="$T=3$")
-p3 = ax.scatter(t2, piT2, s = 3, color = 'darkolivegreen', marker = ".",label="$T=30$")
+p2 = ax.scatter(t2, piT01, s = 3, color = 'palevioletred', marker = ".",label="BM, $T=10$")
+p1 = ax.scatter(t2, piT11, s = 3, color = 'cadetblue', marker = ".",label="$T=3$")
+p3 = ax.scatter(t2, piT21, s = 3, color = 'darkolivegreen', marker = ".",label="$T=30$")
 plots = [p1, p2, p3]
 labels = [item.get_label() for item in plots]
 ax.legend(plots,labels,loc="lower right",fontsize = 5)
@@ -441,9 +528,42 @@ plt.show()
 
 
 
+p1 = 0.5
+p2 = -0.5
 
 
 
+piT22 = optimalpi(sigma, rho, lambdabar, p2, kappa, tau2)
+piT02 = np.zeros(len(piT22))
+piT02[0:2521] = optimalpi(sigma, rho, lambdabar, p2, kappa, tau)
+piT12 = np.zeros(len(piT22))
+piT12[0:757] = optimalpi(sigma, rho, lambdabar, p2, kappa, tau1)
+
+
+
+fig = plt.figure(constrained_layout=False,dpi=300,figsize=(5,3))
+fig.suptitle(f"Optimal investment strategy as function of time for varying $T$",fontsize=10)
+gs = fig.add_gridspec(nrows=1,ncols=1,left=0.12,bottom=0.2,right=0.88,top=0.90,wspace=0,hspace=0)
+ax = fig.add_subplot(gs[0,0])
+xticks = [0,int((1/5)*T2),int((2/5)*T2),int((3/5)*T2),int((4/5)*T2),int(T2)]
+ax.set_xticks(xticks)
+ax.set_xticklabels(xticks,fontsize = 6)
+ax.set_xlim([xticks[0]-0.002,xticks[-1]+0.002])
+plt.xlabel(f"Time",fontsize = 7)
+yticks1 = [0.266, 0.267, 0.268, 0.269, 0.27]
+ax.set_yticks(yticks1)
+ax.set_yticklabels(yticks1,fontsize = 6)
+ax.set_ylim([yticks1[0],yticks1[-1] + (yticks1[-1]-yticks1[0])*0.02])
+plt.grid(axis = 'y', which='major', color=(0.7,0.7,0.7,0), linestyle='--')
+ax.set_ylabel(f"Optimal investment strategy, $\pi^*$",fontsize = 7)
+p2 = ax.scatter(t2, piT02, s = 3, color = 'palevioletred', marker = ".",label="BM, $T=10$")
+p1 = ax.scatter(t2, piT12, s = 3, color = 'cadetblue', marker = ".",label="$T=3$")
+p3 = ax.scatter(t2, piT22, s = 3, color = 'darkolivegreen', marker = ".",label="$T=30$")
+plots = [p1, p2, p3]
+labels = [item.get_label() for item in plots]
+ax.legend(plots,labels,loc="lower right",fontsize = 5)
+
+plt.show()
 
 
 
